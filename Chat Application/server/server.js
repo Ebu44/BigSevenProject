@@ -11,11 +11,14 @@ app.use(morgan("common"));
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
-  console.log(__dirname);
 });
 
 io.on("connection", (socket) => {
+  socket.broadcast.emit("join", "Name"); //İsim alınacak vealınan isim ile sohbet edilecek
   console.log("a user connected");
+  socket.on("chat message", (msg) => {
+    io.emit("chat message", msg);
+  });
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
